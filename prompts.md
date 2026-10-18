@@ -4,11 +4,18 @@
 
 ## Prompt 1 (plan mode, no code)
 
-Don't write any code yet. I want to build a Streamlit app, `app.py`, that explores correlations between health measures in `nhanes_health.csv`. Read the CSV first. The app needs five things: a data preview (short description and a table of the rows); a pairwise view where two dropdowns pick X and Y and the app shows a scatter plot, the correlation r and the number of participants n, with a trend line or binned means and an option to color points by a health threshold such as SBP ≥ 130; a correlation heatmap where the user picks which numeric variables to include, every square shows its coefficient, and the color scale is fixed from -1 to 1; sidebar filters for sex and an age range that update every view (table, scatter plot, r, n and heatmap); and a toggle between Pearson and Spearman that applies to both the pairwise view and the heatmap.
+Don't write any code yet. I want a Streamlit app, `app.py`, to explore correlations in `nhanes_health.csv`. Read the CSV first.
 
-Every column is numeric except `sex`, which must never go into any correlation. Compute every r on rows where both variables are present and show n next to every r. The heatmap colors must run from -1 to 1 so it stays honest. Remind the user that an r near zero does not mean no relationship.
+It needs five things:
+1. A data preview.
+2. A scatter plot for any two variables I pick, showing r and n, with a trend line and an option to color points by a health threshold like SBP ≥ 130.
+3. A correlation heatmap where I pick the variables.
+4. Sidebar filters for sex and age that change every view.
+5. A Pearson/Spearman toggle that works on both the scatter plot and the heatmap.
 
-Use Python, Streamlit, pandas and seaborn (or plotly), in one file called `app.py`. Don't add other packages without asking. Please give me a plan, not code: the build order, how the filters feed every view, the command to run the app, and anything in my request that is unclear.
+`sex` is text, so keep it out of every correlation. The heatmap colors must run from -1 to 1, and every r needs its n next to it. Use only Python, Streamlit, pandas and seaborn, in one file.
+
+Give me a plan first, not code. Tell me how the filters feed every view, and tell me anything that's unclear.
 
 ## Prompt 2 (approve plan, build)
 
