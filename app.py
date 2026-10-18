@@ -66,10 +66,12 @@ def filter_data(df, sexes, age_range):
 
 def pair_correlation(df, x, y, method="pearson"):
     """Return (r, n) for two columns, using only rows where both are present."""
-    pair = df[[x, y]].dropna()
+    pair = df[list(dict.fromkeys([x, y]))].dropna()
     n = len(pair)
     if n < 3 or pair[x].nunique() < 2 or pair[y].nunique() < 2:
         return float("nan"), n
+    if x == y:
+        return 1.0, n
     return float(pair[x].corr(pair[y], method=method)), n
 
 
@@ -84,11 +86,12 @@ def correlation_matrices(df, cols, method="pearson"):
 
 def binned_means(df, x, y, bins=10):
     """Mean of x and y inside quantile bins of x, for a binned-means overlay."""
-    pair = df[[x, y]].dropna()
+    cols = list(dict.fromkeys([x, y]))
+    pair = df[cols].dropna()
     if pair[x].nunique() < 2:
         return pair.iloc[0:0]
     groups = pd.qcut(pair[x], q=min(bins, pair[x].nunique()), duplicates="drop")
-    return pair.groupby(groups, observed=True)[[x, y]].mean()
+    return pair.groupby(groups, observed=True)[cols].mean()
 
 
 # ---------------------------------------------------------------------------
@@ -182,8 +185,8 @@ def main():
             )
 
         fig, ax = plt.subplots(figsize=(8, 5))
-        plot_df = df[[x, y] + [c for c in {v[0] for v in THRESHOLDS.values()}]]
-        plot_df = plot_df.dropna(subset=[x, y])
+        plot_cols = list(dict.fromkeys([x, y] + [v[0] for v in THRESHOLDS.values()]))
+        plot_df = df[plot_cols].dropna(subset=list(dict.fromkeys([x, y])))
         if color_choice == "None":
             ax.scatter(plot_df[x], plot_df[y], s=14, alpha=0.4, color="#3b6ea5")
         else:
